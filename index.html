@@ -61,7 +61,7 @@
             <div class="slide">
                 <h2 class="text-3xl font-bold mb-8 text-center border-b-4 border-amber-300 pb-3 text-slate-800">時計の見た目を確認しよう</h2>
                 <div class="flex-1 flex items-center justify-center">
-                    <div id="s2-clock" style="width:600px;height:480px;"></div>
+                    <div id="s2-clock" style="width:680px;height:480px;"></div>
                 </div>
             </div>
 
@@ -391,9 +391,9 @@
             if (!el) return;
 
             // SVG全体サイズ（ラベル込み）
-            const W = 600, H = 480;
-            // 時計の中心・半径
-            const cx = 300, cy = 240, r = 180;
+            const W = 680, H = 480;
+            // 時計の中心・半径（左側にラベル用スペースを確保するため中心を右寄りに）
+            const cx = 360, cy = 240, r = 180;
 
             // 10:10の針角度
             // 短針: 10時10分 = 10*30 + 10*0.5 - 90 = 215°
@@ -408,11 +408,11 @@
             const mTipX = cx + mLen * Math.cos(mAngle);
             const mTipY = cy + mLen * Math.sin(mAngle);
 
-            // ラベルボックス座標（時計と重ならない位置）
-            // みじかいはり: 左上
-            const hLabelX = 18, hLabelY = 100, hLabelW = 170, hLabelH = 52;
-            // ながいはり: 右上
-            const mLabelX = 400, mLabelY = 55, mLabelW = 165, mLabelH = 52;
+            // ラベルボックス座標（文字盤の円の外）
+            // みじかいはり: 左外（時計左端はcx-r=180、ラベル右端が180以下になるよう配置）
+            const hLabelX = 5, hLabelY = 175, hLabelW = 170, hLabelH = 52;
+            // ながいはり: 右外（時計右端はcx+r=540）
+            const mLabelX = 508, mLabelY = 50, mLabelW = 165, mLabelH = 52;
 
             // 引き出し線の起点（ラベルの右端中央 / 左端中央）
             const hLineStartX = hLabelX + hLabelW;
