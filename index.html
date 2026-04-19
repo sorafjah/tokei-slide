@@ -60,18 +60,8 @@
             <!-- スライド 2: 時計の部品を確認する -->
             <div class="slide">
                 <h2 class="text-3xl font-bold mb-8 text-center border-b-4 border-amber-300 pb-3 text-slate-800">時計の見た目を確認しよう</h2>
-                <div class="flex-1 flex items-center justify-center relative">
-                    <div class="relative w-96 h-96">
-                        <div id="s2-clock" class="w-full h-full"></div>
-                        <div class="absolute top-[28%] -left-[10%] bg-blue-100 border-4 border-blue-500 text-blue-800 font-bold py-2 px-4 rounded-xl shadow-md text-xl z-10">
-                            みじかいはり
-                            <div class="absolute top-1/2 -right-12 w-12 border-t-4 border-blue-500 transform rotate-[20deg] origin-left"></div>
-                        </div>
-                        <div class="absolute top-[18%] -right-[15%] bg-red-100 border-4 border-red-500 text-red-800 font-bold py-2 px-4 rounded-xl shadow-md text-xl z-10">
-                            ながいはり
-                            <div class="absolute top-1/2 -left-12 w-12 border-t-4 border-red-500 transform -rotate-[15deg] origin-right"></div>
-                        </div>
-                    </div>
+                <div class="flex-1 flex items-center justify-center">
+                    <div id="s2-clock" style="width:600px;height:480px;"></div>
                 </div>
             </div>
 
@@ -396,8 +386,93 @@
             el.innerHTML = svg;
         }
 
+        function drawClockWithLabels(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            // SVG全体サイズ（ラベル込み）
+            const W = 600, H = 480;
+            // 時計の中心・半径
+            const cx = 300, cy = 240, r = 180;
+
+            // 10:10の針角度
+            // 短針: 10時10分 = 10*30 + 10*0.5 - 90 = 215°
+            const hAngle = (10 * 30 + 10 * 0.5 - 90) * Math.PI / 180;
+            // 長針: 10分 = 10*6 - 90 = -30°（330°）
+            const mAngle = (10 * 6 - 90) * Math.PI / 180;
+
+            // 針の先端座標
+            const hLen = 100, mLen = 153;
+            const hTipX = cx + hLen * Math.cos(hAngle);
+            const hTipY = cy + hLen * Math.sin(hAngle);
+            const mTipX = cx + mLen * Math.cos(mAngle);
+            const mTipY = cy + mLen * Math.sin(mAngle);
+
+            // ラベルボックス座標（時計と重ならない位置）
+            // みじかいはり: 左上
+            const hLabelX = 18, hLabelY = 100, hLabelW = 170, hLabelH = 52;
+            // ながいはり: 右上
+            const mLabelX = 400, mLabelY = 55, mLabelW = 165, mLabelH = 52;
+
+            // 引き出し線の起点（ラベルの右端中央 / 左端中央）
+            const hLineStartX = hLabelX + hLabelW;
+            const hLineStartY = hLabelY + hLabelH / 2;
+            const mLineStartX = mLabelX;
+            const mLineStartY = mLabelY + mLabelH / 2;
+
+            let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" font-family="'Hiragino Maru Gothic ProN','Meiryo',sans-serif">`;
+
+            // 時計の文字盤
+            svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="white" stroke="#334155" stroke-width="8"/>`;
+
+            // 目盛り
+            for (let i = 0; i < 60; i++) {
+                const isFive = i % 5 === 0;
+                const len = isFive ? 18 : 9;
+                const sw = isFive ? 5 : 2;
+                const a = (i * 6 - 90) * Math.PI / 180;
+                const x1 = cx + (r - len) * Math.cos(a);
+                const y1 = cy + (r - len) * Math.sin(a);
+                const x2 = cx + r * Math.cos(a);
+                const y2 = cy + r * Math.sin(a);
+                svg += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#475569" stroke-width="${sw}" stroke-linecap="round"/>`;
+            }
+
+            // 数字
+            for (let i = 1; i <= 12; i++) {
+                const a = (i * 30 - 90) * Math.PI / 180;
+                const x = cx + (r - 42) * Math.cos(a);
+                const y = cy + (r - 42) * Math.sin(a);
+                svg += `<text x="${x}" y="${y}" font-size="32" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#1e293b">${i}</text>`;
+            }
+
+            // 短針（青）
+            svg += `<line x1="${cx}" y1="${cy}" x2="${hTipX}" y2="${hTipY}" stroke="#2563eb" stroke-width="16" stroke-linecap="round"/>`;
+            // 長針（赤）
+            svg += `<line x1="${cx}" y1="${cy}" x2="${mTipX}" y2="${mTipY}" stroke="#dc2626" stroke-width="9" stroke-linecap="round"/>`;
+            // 中心
+            svg += `<circle cx="${cx}" cy="${cy}" r="12" fill="#1e293b"/>`;
+            svg += `<circle cx="${cx}" cy="${cy}" r="5" fill="white"/>`;
+
+            // 引き出し線（短針: ラベル右端→針の先端付近）
+            svg += `<line x1="${hLineStartX}" y1="${hLineStartY}" x2="${hTipX}" y2="${hTipY}" stroke="#2563eb" stroke-width="3" stroke-dasharray="6,3"/>`;
+            // 引き出し線（長針: ラベル左端→針の先端付近）
+            svg += `<line x1="${mLineStartX}" y1="${mLineStartY}" x2="${mTipX}" y2="${mTipY}" stroke="#dc2626" stroke-width="3" stroke-dasharray="6,3"/>`;
+
+            // みじかいはり ラベル
+            svg += `<rect x="${hLabelX}" y="${hLabelY}" width="${hLabelW}" height="${hLabelH}" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="4"/>`;
+            svg += `<text x="${hLabelX + hLabelW/2}" y="${hLabelY + hLabelH/2}" font-size="24" font-weight="bold" fill="#1d4ed8" text-anchor="middle" dominant-baseline="central">みじかいはり</text>`;
+
+            // ながいはり ラベル
+            svg += `<rect x="${mLabelX}" y="${mLabelY}" width="${mLabelW}" height="${mLabelH}" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="4"/>`;
+            svg += `<text x="${mLabelX + mLabelW/2}" y="${mLabelY + mLabelH/2}" font-size="24" font-weight="bold" fill="#dc2626" text-anchor="middle" dominant-baseline="central">ながいはり</text>`;
+
+            svg += `</svg>`;
+            el.innerHTML = svg;
+        }
+
         function initClocks() {
-            drawClock('s2-clock', {hour: 10, minute: 10});
+            drawClockWithLabels('s2-clock');
            
             drawClock('s3-clock-1', {hour: 3, minute: 0}, {hideMinuteHand: true});
             drawClock('s3-clock-2', {hour: 7, minute: 0}, {hideMinuteHand: true});
