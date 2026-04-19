@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時計を読めると何がいい？ - スライド教材</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Hiragino Maru Gothic ProN"', '"Rounded Mplus 1c"', 'Meiryo', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Hiragino Maru Gothic ProN', 'Rounded Mplus 1c', 'Meiryo', sans-serif;
+            background-color: #f1f5f9;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .slide.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        ruby { font-size: 1.1em; }
+        rt { font-size: 0.6em; color: #64748b; }
+    </style>
+</head>
+<body>
+
+    <!-- プレゼンテーションコンテナ -->
+    <div class="relative bg-white shadow-2xl rounded-2xl overflow-hidden w-full max-w-5xl h-[90vh] min-h-[600px] flex flex-col">
+        
+        <!-- スライド表示エリア -->
+        <div id="slides-container" class="flex-1 relative p-8">
+            
+            <!-- スライド 1: タイトル・導入 -->
+            <div class="slide active justify-center items-center p-10">
+                <h1 class="text-5xl font-bold text-slate-800 mb-12">時計を読めると何がいい？</h1>
+                <ul class="text-3xl space-y-6 text-slate-700 list-disc list-inside bg-slate-50 p-8 rounded-2xl border-2 border-slate-100">
+                    <li>仕事の<ruby>集合時間<rt>しゅうごうじかん</rt></ruby>に間に合う</li>
+                    <li>バスに乗り遅れない</li>
+                    <li><ruby>休憩<rt>きゅうけい</rt></ruby>が終わる時間がわかる</li>
+                </ul>
+                <div class="mt-12 p-6 bg-amber-100 rounded-xl text-amber-900 font-bold text-2xl border border-amber-300 shadow-sm text-center">
+                    時間（じかん）がわかると、安心してすごせるね！
+                </div>
+            </div>
+
+            <!-- スライド 2: 時計の部品を確認する -->
+            <div class="slide">
+                <h2 class="text-3xl font-bold mb-8 text-center border-b-4 border-amber-300 pb-3 text-slate-800">時計の見た目を確認しよう</h2>
+                <div class="flex-1 flex items-center justify-center relative">
+                    <div class="relative w-96 h-96">
+                        <div id="s2-clock" class="w-full h-full"></div>
+                        <!-- ラベル：みじかいはり -->
+                        <div class="absolute top-16 -left-16 bg-blue-100 border-4 border-blue-500 text-blue-800 font-bold py-2 px-4 rounded-xl shadow-md text-xl z-10">
+                            みじかいはり
+                            <div class="absolute top-1/2 -right-8 w-8 border-t-4 border-blue-500 transform rotate-[30deg] origin-left"></div>
+                        </div>
+                        <!-- ラベル：ながいはり -->
+                        <div class="absolute top-12 -right-16 bg-red-100 border-4 border-red-500 text-red-800 font-bold py-2 px-4 rounded-xl shadow-md text-xl z-10">
+                            ながいはり
+                            <div class="absolute top-1/2 -left-8 w-8 border-t-4 border-red-500 transform -rotate-[30deg] origin-right"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 3: 短針の読み方① -->
+            <div class="slide">
+                <h2 class="text-3xl font-bold mb-4 text-center border-b-4 border-amber-300 pb-3 text-slate-800">
+                    <span class="text-blue-600">みじかいはり</span> ＝ 〇時（じ）
+                </h2>
+                <p class="text-2xl text-center mb-8 text-slate-600 font-bold">数字（すうじ）のところにあったら、そのままよむよ。</p>
+                <div class="flex-1 flex items-center justify-around px-8">
+                    <div class="flex flex-col items-center">
+                        <div id="s3-clock-1" class="w-56 h-56"></div>
+                        <div class="mt-6 text-4xl font-bold text-blue-600 bg-blue-50 px-6 py-2 rounded-lg">3時</div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div id="s3-clock-2" class="w-56 h-56"></div>
+                        <div class="mt-6 text-4xl font-bold text-blue-600 bg-blue-50 px-6 py-2 rounded-lg">7時</div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div id="s3-clock-3" class="w-56 h-56"></div>
+                        <div class="mt-6 text-4xl font-bold text-blue-600 bg-blue-50 px-6 py-2 rounded-lg">11時</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 4: 短針の読み方② -->
+            <div class="slide">
+                <h2 class="text-3xl font-bold mb-8 text-center border-b-4 border-amber-300 pb-3 text-slate-800">
+                    はりが 数字と数字の間 にある場合
+                </h2>
+                <div class="flex-1 flex items-center justify-center gap-16">
+                    <div id="s4-clock" class="w-80 h-80 drop-shadow-lg"></div>
+                    <div class="flex flex-col gap-8 w-1/2">
+                        <div class="bg-blue-100 p-6 rounded-2xl border-4 border-blue-400">
+                            <p class="text-2xl font-bold text-blue-900 mb-2">ルール</p>
+                            <p class="text-2xl">前の <span class="text-blue-700 font-bold text-4xl bg-white px-2 rounded">小さい数字</span> を読みます。</p>
+                        </div>
+                        <div class="text-3xl font-bold text-center leading-relaxed">
+                            「3」と「4」の間だから<br>
+                            <span class="text-5xl text-blue-600 mt-4 inline-block bg-blue-50 px-8 py-3 rounded-full border-2 border-blue-200">3時</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 5: 長針の基礎 -->
+            <div class="slide">
+                <h2 class="text-3xl font-bold mb-6 text-center border-b-4 border-amber-300 pb-3 text-slate-800">
+                    <span class="text-red-600">ながいはり</span> ＝ 〇分（ふん・ぷん）
+                </h2>
+                <div class="flex-1 flex items-center justify-center gap-12">
+                    <div class="flex gap-4 bg-red-50 p-6 rounded-2xl border-4 border-red-200 shadow-sm">
+                        <table class="text-center w-36 text-xl">
+                            <tr class="border-b-2 border-red-300"><th class="pb-2">数字</th><th class="pb-2 text-red-600">分</th></tr>
+                            <tr><td class="pt-2">1</td><td class="pt-2 font-bold text-red-600">5分</td></tr>
+                            <tr><td class="pt-2">2</td><td class="pt-2 font-bold text-red-600">10分</td></tr>
+                            <tr><td class="pt-2">3</td><td class="pt-2 font-bold text-red-600">15分</td></tr>
+                            <tr><td class="pt-2">4</td><td class="pt-2 font-bold text-red-600">20分</td></tr>
+                            <tr><td class="pt-2">5</td><td class="pt-2 font-bold text-red-600">25分</td></tr>
+                            <tr><td class="pt-2">6</td><td class="pt-2 font-bold text-red-600">30分</td></tr>
+                        </table>
+                        <table class="text-center w-36 text-xl border-l-4 border-white pl-4">
+                            <tr class="border-b-2 border-red-300"><th class="pb-2">数字</th><th class="pb-2 text-red-600">分</th></tr>
+                            <tr><td class="pt-2">7</td><td class="pt-2 font-bold text-red-600">35分</td></tr>
+                            <tr><td class="pt-2">8</td><td class="pt-2 font-bold text-red-600">40分</td></tr>
+                            <tr><td class="pt-2">9</td><td class="pt-2 font-bold text-red-600">45分</td></tr>
+                            <tr><td class="pt-2">10</td><td class="pt-2 font-bold text-red-600">50分</td></tr>
+                            <tr><td class="pt-2">11</td><td class="pt-2 font-bold text-red-600">55分</td></tr>
+                            <tr><td class="pt-2">12</td><td class="pt-2 font-bold text-red-600">0分</td></tr>
+                        </table>
+                    </div>
+                    <div id="s5-clock" class="w-96 h-96 drop-shadow-md"></div>
+                </div>
+            </div>
+
+            <!-- スライド 6: 長針の読み方① -->
+            <div class="slide">
+                <h2 class="text-3xl font-bold mb-10 text-center border-b-4 border-amber-300 pb-3 text-slate-800">
+                    ながいはりが 数字のうえ にある
+                </h2>
+                <div class="grid grid-cols-2 gap-y-6 gap-x-8 flex-1 place-items-center pb-4">
+                    <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-200 w-full justify-center">
+                        <div id="s6-clock-1" class="w-40 h-40"></div>
+                        <div class="text-3xl font-bold text-red-600">0分</div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-200 w-full justify-center">
+                        <div id="s6-clock-2" class="w-40 h-40"></div>
+                        <div class="text-3xl font-bold text-red-600">15分</div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-200 w-full justify-center">
+                        <div id="s6-clock-3" class="w-40 h-40"></div>
+                        <div class="text-3xl font-bold text-red-600">30分</div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-200 w-full justify-center">
+                        <div id="s6-clock-4" class="w-40 h-40"></div>
+                        <div class="text-3xl font-bold text-red-600">45分</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 7: 長針の読み方② -->
+            <div class="slide">
+                <h2 class="text-3xl font-bold mb-4 text-center border-b-4 border-amber-300 pb-3 text-slate-800">
+                    数字と数字の間 にある場合
+                </h2>
+                <p class="text-2xl text-center mb-4 text-red-600 font-bold bg-red-50 py-2 rounded-full w-2/3 mx-auto">
+                    1目盛り（めもり）ずつ、かぞえてみよう
+                </p>
+                <div class="flex-1 flex items-center justify-center gap-10">
+                    <div id="s7-clock" class="w-80 h-80 drop-shadow-lg"></div>
+                    <div class="flex flex-col gap-4 text-2xl">
+                        <div class="bg-white p-3 rounded shadow-sm border border-slate-100">
+                            「3」のところは <span class="font-bold text-red-600">15分</span>
+                        </div>
+                        <div class="text-center text-slate-400">↓</div>
+                        <div class="bg-white p-3 rounded shadow-sm border border-slate-100">
+                            そこから<br><span class="font-bold">2つ</span> すすんでいるから...
+                        </div>
+                        <div class="text-center text-slate-400">↓</div>
+                        <div class="text-5xl font-bold text-red-600 mt-1 bg-red-100 px-6 py-4 rounded-2xl border-4 border-red-300 text-center">
+                            17分
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 8: 短針＋長針を合わせて読む -->
+            <div class="slide">
+                <h2 class="text-3xl font-bold mb-8 text-center border-b-4 border-amber-300 pb-3 text-slate-800">
+                    合わせると 〇時〇分！
+                </h2>
+                <div class="flex-1 flex items-center justify-center gap-16">
+                    <div id="s8-clock" class="w-96 h-96 drop-shadow-xl"></div>
+                    <div class="flex flex-col gap-6 text-3xl bg-slate-50 p-10 rounded-3xl border-4 border-slate-200 shadow-inner w-1/2">
+                        <div class="flex items-center gap-4">
+                            <span class="inline-block w-8 h-8 bg-blue-600 rounded-full border-2 border-white shadow"></span>
+                            みじかいはり → <span class="font-bold text-blue-600 text-4xl ml-auto">10時</span>
+                        </div>
+                        <div class="text-center text-slate-400 font-bold">＋</div>
+                        <div class="flex items-center gap-4">
+                            <span class="inline-block w-8 h-8 bg-red-600 rounded-full border-2 border-white shadow"></span>
+                            ながいはり → <span class="font-bold text-red-600 text-4xl ml-auto">10分</span>
+                        </div>
+                        <div class="border-t-4 border-dashed border-slate-300 my-4"></div>
+                        <div class="text-center font-bold text-2xl text-slate-600">
+                            あわせると<br>
+                            <span class="text-6xl text-slate-800 mt-4 inline-block">10時10分</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 9: 練習問題① -->
+            <div class="slide">
+                <h2 class="text-3xl font-bold mb-8 text-center border-b-4 border-amber-300 pb-3 text-slate-800">
+                    れんしゅうもんだい ① <span class="text-2xl text-slate-500">（なんじ なんぷん？）</span>
+                </h2>
+                <div class="flex-1 flex items-start justify-around pt-4">
+                    <div class="flex flex-col items-center gap-6 w-1/2">
+                        <div id="s9-clock-1" class="w-72 h-72 drop-shadow-md"></div>
+                        <button class="ans-btn bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-8 rounded-full shadow-md transition text-xl w-48" onclick="showAnswer('ans-9-1')">
+                            こたえをみる
+                        </button>
+                        <div id="ans-9-1" class="ans-text hidden text-5xl font-bold text-slate-800 mt-2 bg-amber-100 px-8 py-3 rounded-xl border-2 border-amber-300">
+                            <span class="text-blue-600">9時</span> <span class="text-red-600">0分</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center gap-6 w-1/2">
+                        <div id="s9-clock-2" class="w-72 h-72 drop-shadow-md"></div>
+                        <button class="ans-btn bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-8 rounded-full shadow-md transition text-xl w-48" onclick="showAnswer('ans-9-2')">
+                            こたえをみる
+                        </button>
+                        <div id="ans-9-2" class="ans-text hidden text-5xl font-bold text-slate-800 mt-2 bg-amber-100 px-8 py-3 rounded-xl border-2 border-amber-300">
+                            <span class="text-blue-600">3時</span> <span class="text-red-600">30分</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 10: 練習問題② -->
+            <div class="slide">
+                <h2 class="text-3xl font-bold mb-8 text-center border-b-4 border-amber-300 pb-3 text-slate-800">
+                    れんしゅうもんだい ② <span class="text-2xl text-slate-500">（すこしむずかしいよ）</span>
+                </h2>
+                <div class="flex-1 flex items-start justify-around pt-4">
+                    <div class="flex flex-col items-center gap-6 w-1/2">
+                        <div id="s10-clock-1" class="w-72 h-72 drop-shadow-md"></div>
+                        <button class="ans-btn bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-8 rounded-full shadow-md transition text-xl w-48" onclick="showAnswer('ans-10-1')">
+                            こたえをみる
+                        </button>
+                        <div id="ans-10-1" class="ans-text hidden text-5xl font-bold text-slate-800 mt-2 bg-amber-100 px-8 py-3 rounded-xl border-2 border-amber-300">
+                            <span class="text-blue-600">10時</span> <span class="text-red-600">23分</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center gap-6 w-1/2">
+                        <div id="s10-clock-2" class="w-72 h-72 drop-shadow-md"></div>
+                        <button class="ans-btn bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-8 rounded-full shadow-md transition text-xl w-48" onclick="showAnswer('ans-10-2')">
+                            こたえをみる
+                        </button>
+                        <div id="ans-10-2" class="ans-text hidden text-5xl font-bold text-slate-800 mt-2 bg-amber-100 px-8 py-3 rounded-xl border-2 border-amber-300">
+                            <span class="text-blue-600">7時</span> <span class="text-red-600">47分</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 11: まとめ -->
+            <div class="slide justify-center items-center">
+                <h1 class="text-5xl font-bold mb-12 text-center border-b-8 border-amber-300 pb-4 text-slate-800">今日のポイント</h1>
+                <div class="flex flex-col gap-8 text-3xl max-w-3xl mx-auto w-full">
+                    <div class="bg-blue-50 border-l-[12px] border-blue-500 p-8 rounded-r-2xl shadow-md flex items-center justify-between">
+                        <span class="font-bold">みじかいはり</span>
+                        <span class="text-blue-400 font-bold">→</span>
+                        <span class="font-bold text-blue-700 text-5xl bg-white px-6 py-2 rounded-xl border-2 border-blue-200">〇 時</span>
+                    </div>
+                    <div class="bg-red-50 border-l-[12px] border-red-500 p-8 rounded-r-2xl shadow-md flex items-center justify-between">
+                        <span class="font-bold">ながいはり</span>
+                        <span class="text-red-400 font-bold">→</span>
+                        <span class="font-bold text-red-700 text-5xl bg-white px-6 py-2 rounded-xl border-2 border-red-200">〇 分</span>
+                    </div>
+                    <div class="bg-amber-100 p-8 rounded-2xl shadow-lg text-center font-bold text-slate-800 mt-6 border-4 border-amber-300 text-4xl">
+                        あわせて 読んでみよう！
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ナビゲーションバー -->
+        <div class="h-20 bg-slate-100 border-t border-slate-300 flex items-center justify-between px-8 select-none">
+            <button id="prev-btn" class="bg-white hover:bg-slate-50 text-slate-700 font-bold py-3 px-8 rounded-full shadow border border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-xl w-36">
+                ◀ まえ
+            </button>
+            <div class="flex items-center gap-4">
+                <div id="slide-counter" class="text-slate-500 font-bold text-xl tracking-widest"></div>
+            </div>
+            <button id="next-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg disabled:opacity-30 disabled:cursor-not-allowed transition text-xl w-36">
+                つぎ ▶
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- SVG時計描画ロジック ---
+        function drawClock(id, time, options = {}) {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            const cx = 100, cy = 100, r = 80;
+            let svg = `<svg viewBox="0 0 200 200" class="w-full h-full overflow-visible">`;
+            
+            // 矢印マーカーの定義
+            svg += `<defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626" />
+                </marker>
+            </defs>`;
+            
+            // 時計の枠
+            svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="white" stroke="#334155" stroke-width="4" />`;
+
+            // スライド4：短針の読む範囲を強調する扇形
+            if (options.highlightHourRange) {
+                let [h1, h2] = options.highlightHourRange;
+                let startAngle = (h1 * 30 - 90) * Math.PI / 180;
+                let endAngle = (h2 * 30 - 90) * Math.PI / 180;
+                let sx = cx + r * Math.cos(startAngle);
+                let sy = cy + r * Math.sin(startAngle);
+                let ex = cx + r * Math.cos(endAngle);
+                let ey = cy + r * Math.sin(endAngle);
+                // 円の中心から弧を描くパス
+                svg += `<path d="M ${cx} ${cy} L ${sx} ${sy} A ${r} ${r} 0 0 1 ${ex} ${ey} Z" fill="rgba(37, 99, 235, 0.15)" />`;
+            }
+
+            // 目盛り
+            for (let i = 0; i < 60; i++) {
+                let isFive = i % 5 === 0;
+                let length = isFive ? 8 : 4;
+                let strokeWidth = isFive ? 3 : 1;
+                let angle = (i * 6 - 90) * Math.PI / 180;
+                let x1 = cx + (r - length) * Math.cos(angle);
+                let y1 = cy + (r - length) * Math.sin(angle);
+                let x2 = cx + r * Math.cos(angle);
+                let y2 = cy + r * Math.sin(angle);
+                svg += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#475569" stroke-width="${strokeWidth}" stroke-linecap="round" />`;
+            }
+
+            // 数字（1〜12）
+            for (let i = 1; i <= 12; i++) {
+                let angle = (i * 30 - 90) * Math.PI / 180;
+                let x = cx + (r - 20) * Math.cos(angle);
+                let y = cy + (r - 20) * Math.sin(angle);
+                svg += `<text x="${x}" y="${y}" font-size="16" font-family="sans-serif" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#1e293b">${i}</text>`;
+            }
+
+            // スライド5：外側の「分」の数字
+            if (options.showMinuteLabels) {
+                for (let i = 0; i < 60; i += 5) {
+                    let angle = (i * 6 - 90) * Math.PI / 180;
+                    let offset = 18;
+                    let x = cx + (r + offset) * Math.cos(angle);
+                    let y = cy + (r + offset) * Math.sin(angle);
+                    let text = i === 0 ? "0(60)" : i;
+                    let fontSize = i === 0 ? "9" : "12";
+                    svg += `<text x="${x}" y="${y}" font-size="${fontSize}" font-weight="bold" fill="#dc2626" text-anchor="middle" dominant-baseline="central">${text}</text>`;
+                }
+            }
+
+            // スライド7：長針の数え方を示す矢印
+            if (options.highlightMinuteArrow) {
+                let [m1, m2] = options.highlightMinuteArrow;
+                let r_arrow = r + 15;
+                let startAngle = (m1 * 6 - 90) * Math.PI / 180;
+                let endAngle = (m2 * 6 - 90) * Math.PI / 180;
+                let sx = cx + r_arrow * Math.cos(startAngle);
+                let sy = cy + r_arrow * Math.sin(startAngle);
+                let ex = cx + r_arrow * Math.cos(endAngle);
+                let ey = cy + r_arrow * Math.sin(endAngle);
+                // 外側の弧に沿った矢印
+                svg += `<path d="M ${sx} ${sy} A ${r_arrow} ${r_arrow} 0 0 1 ${ex} ${ey}" fill="none" stroke="#dc2626" stroke-width="3" marker-end="url(#arrow)" stroke-linecap="round" />`;
+            }
+
+            let h = time.hour || 0;
+            let m = time.minute || 0;
+            // 短針は分の経過に合わせて少し動かす
+            let hAngle = (h * 30 + m * 0.5 - 90);
+            let mAngle = (m * 6 - 90);
+
+            // 短針（青）
+            if (!options.hideHourHand) {
+                let hLength = 45;
+                let hx = cx + hLength * Math.cos(hAngle * Math.PI / 180);
+                let hy = cy + hLength * Math.sin(hAngle * Math.PI / 180);
+                svg += `<line x1="${cx}" y1="${cy}" x2="${hx}" y2="${hy}" stroke="#2563eb" stroke-width="8" stroke-linecap="round" />`;
+            }
+
+            // 長針（赤）
+            if (!options.hideMinuteHand) {
+                let mLength = 68;
+                let mx = cx + mLength * Math.cos(mAngle * Math.PI / 180);
+                let my = cy + mLength * Math.sin(mAngle * Math.PI / 180);
+                svg += `<line x1="${cx}" y1="${cy}" x2="${mx}" y2="${my}" stroke="#dc2626" stroke-width="4" stroke-linecap="round" />`;
+            }
+
+            // 中心の丸
+            svg += `<circle cx="${cx}" cy="${cy}" r="6" fill="#1e293b" />`;
+            svg += `<circle cx="${cx}" cy="${cy}" r="2" fill="white" />`;
+
+            svg += `</svg>`;
+            el.innerHTML = svg;
+        }
+
+        // 全ての時計を描画
+        function initClocks() {
+            drawClock('s2-clock', {hour: 10, minute: 10});
+            
+            drawClock('s3-clock-1', {hour: 3, minute: 0}, {hideMinuteHand: true});
+            drawClock('s3-clock-2', {hour: 7, minute: 0}, {hideMinuteHand: true});
+            drawClock('s3-clock-3', {hour: 11, minute: 0}, {hideMinuteHand: true});
+            
+            drawClock('s4-clock', {hour: 3, minute: 30}, {hideMinuteHand: true, highlightHourRange: [3, 4]});
+            
+            drawClock('s5-clock', {hour: 12, minute: 0}, {hideHourHand: true, hideMinuteHand: true, showMinuteLabels: true});
+            
+            drawClock('s6-clock-1', {hour: 12, minute: 0}, {hideHourHand: true});
+            drawClock('s6-clock-2', {hour: 12, minute: 15}, {hideHourHand: true});
+            drawClock('s6-clock-3', {hour: 12, minute: 30}, {hideHourHand: true});
+            drawClock('s6-clock-4', {hour: 12, minute: 45}, {hideHourHand: true});
+            
+            drawClock('s7-clock', {hour: 3, minute: 17}, {hideHourHand: true, highlightMinuteArrow: [15, 17]});
+            
+            drawClock('s8-clock', {hour: 10, minute: 10});
+            
+            drawClock('s9-clock-1', {hour: 9, minute: 0});
+            drawClock('s9-clock-2', {hour: 3, minute: 30});
+            
+            drawClock('s10-clock-1', {hour: 10, minute: 23});
+            drawClock('s10-clock-2', {hour: 7, minute: 47});
+        }
+
+        // --- スライド制御ロジック ---
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            
+            // カウンター更新
+            document.getElementById('slide-counter').innerText = `${index + 1} / ${slides.length}`;
+            
+            // ボタンの有効/無効化
+            document.getElementById('prev-btn').disabled = index === 0;
+            document.getElementById('next-btn').disabled = index === slides.length - 1;
+
+            // スライドが切り替わったら答えを隠す
+            document.querySelectorAll('.ans-text').forEach(el => el.classList.add('hidden'));
+        }
+
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        });
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        });
+
+        // 答えを表示する関数
+        function showAnswer(id) {
+            const el = document.getElementById(id);
+            if(el) {
+                el.classList.remove('hidden');
+                // ふわっと表示させる簡単なアニメーション付与
+                el.style.animation = 'fadeIn 0.3s ease-in-out';
+            }
+        }
+
+        // ページ読み込み時の初期化
+        window.onload = () => {
+            initClocks();
+            showSlide(0);
+        };
+
+        // キーボードの矢印キー（← / →）でもスライドを操作できるように追加
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            } else if (e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
