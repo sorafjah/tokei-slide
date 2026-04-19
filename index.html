@@ -19,12 +19,14 @@
     <style>
         body {
             font-family: 'Hiragino Maru Gothic ProN', 'Rounded Mplus 1c', 'Meiryo', sans-serif;
-            background-color: #f1f5f9;
+            background-color: #ffffff; /* 背景を白にして枠をなくす */
             margin: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
+            width: 100vw;
+            overflow: hidden; /* 全画面で固定 */
         }
         .slide {
             display: none;
@@ -46,11 +48,11 @@
 </head>
 <body>
 
-    <!-- プレゼンテーションコンテナ -->
-    <div class="relative bg-white shadow-2xl rounded-2xl overflow-hidden w-full max-w-5xl h-[90vh] min-h-[600px] flex flex-col">
+    <!-- プレゼンテーションコンテナ（枠や影を削除し、画面いっぱいに広げる） -->
+    <div class="relative bg-white w-full h-full flex flex-col">
         
-        <!-- スライド表示エリア -->
-        <div id="slides-container" class="flex-1 relative p-8">
+        <!-- スライド表示エリア（画面が小さい時は縦スクロールできるようにする） -->
+        <div id="slides-container" class="flex-1 relative p-8 overflow-y-auto overflow-x-hidden">
             
             <!-- スライド 1: タイトル・導入 -->
             <div class="slide active justify-center items-center p-10">
@@ -309,19 +311,6 @@
             </div>
 
         </div>
-
-        <!-- ナビゲーションバー -->
-        <div class="h-20 bg-slate-100 border-t border-slate-300 flex items-center justify-between px-8 select-none">
-            <button id="prev-btn" class="bg-white hover:bg-slate-50 text-slate-700 font-bold py-3 px-8 rounded-full shadow border border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-xl w-36">
-                ◀ まえ
-            </button>
-            <div class="flex items-center gap-4">
-                <div id="slide-counter" class="text-slate-500 font-bold text-xl tracking-widest"></div>
-            </div>
-            <button id="next-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg disabled:opacity-30 disabled:cursor-not-allowed transition text-xl w-36">
-                つぎ ▶
-            </button>
-        </div>
     </div>
 
     <script>
@@ -474,31 +463,10 @@
                     slide.classList.remove('active');
                 }
             });
-            
-            // カウンター更新
-            document.getElementById('slide-counter').innerText = `${index + 1} / ${slides.length}`;
-            
-            // ボタンの有効/無効化
-            document.getElementById('prev-btn').disabled = index === 0;
-            document.getElementById('next-btn').disabled = index === slides.length - 1;
 
             // スライドが切り替わったら答えを隠す
             document.querySelectorAll('.ans-text').forEach(el => el.classList.add('hidden'));
         }
-
-        document.getElementById('prev-btn').addEventListener('click', () => {
-            if (currentSlide > 0) {
-                currentSlide--;
-                showSlide(currentSlide);
-            }
-        });
-
-        document.getElementById('next-btn').addEventListener('click', () => {
-            if (currentSlide < slides.length - 1) {
-                currentSlide++;
-                showSlide(currentSlide);
-            }
-        });
 
         // 答えを表示する関数
         function showAnswer(id) {
@@ -515,6 +483,37 @@
             initClocks();
             showSlide(0);
         };
+
+        // スワイプ操作の追加（iPadなどのタッチパネル用）
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const threshold = 50; // スワイプの判定基準（ピクセル）
+            if (touchEndX < touchStartX - threshold) {
+                // 左にスワイプ（次へ進む）
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            }
+            if (touchEndX > touchStartX + threshold) {
+                // 右にスワイプ（前へ戻る）
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            }
+        }
 
         // キーボードの矢印キー（← / →）でもスライドを操作できるように追加
         document.addEventListener('keydown', (e) => {
